@@ -71,68 +71,68 @@ def lambda_handler(event, context):
 
 
 
-############################## MY CODE #################################
-import boto3
-from datetime import datetime, timezone
+# ############################## MY CODE #################################
+# import boto3
+# from datetime import datetime, timezone
 
-# Initialize the IAM client
-client = boto3.client('iam', region_name='us-east-1')
+# # Initialize the IAM client
+# client = boto3.client('iam', region_name='us-east-1')
 
-# List current access keys for a specific user
-response = client.list_access_keys(UserName='python-user')
-print('Current access keys:', response)
+# # List current access keys for a specific user
+# response = client.list_access_keys(UserName='python-user')
+# print('Current access keys:', response)
 
-# Create a new access key
-response = client.create_access_key(UserName='python-user')
-access_key = response['AccessKey']
-access_key_id = access_key['AccessKeyId']
-secret_access_key = access_key['SecretAccessKey']
+# # Create a new access key
+# response = client.create_access_key(UserName='python-user')
+# access_key = response['AccessKey']
+# access_key_id = access_key['AccessKeyId']
+# secret_access_key = access_key['SecretAccessKey']
 
-# Print or use the access key details as needed
-print('New AccessKeyId:', access_key_id)
-print('New SecretAccessKey:', secret_access_key)
+# # Print or use the access key details as needed
+# print('New AccessKeyId:', access_key_id)
+# print('New SecretAccessKey:', secret_access_key)
 
-# Define a function to calculate key age in days
-def key_age(access_key_creation_date, user_creation_date):
-    current_date = datetime.now(timezone.utc)
-    age = current_date - access_key_creation_date
-    return age.days
+# # Define a function to calculate key age in days
+# def key_age(access_key_creation_date, user_creation_date):
+#     current_date = datetime.now(timezone.utc)
+#     age = current_date - access_key_creation_date
+#     return age.days
 
-# List all IAM users
-iam_all_users = client.list_users()
+# # List all IAM users
+# iam_all_users = client.list_users()
 
-# Define the maximum age for access keys in days
-KEY_MAXIMUM_AGE = 1
+# # Define the maximum age for access keys in days
+# KEY_MAXIMUM_AGE = 1
 
-for user in iam_all_users['Users']:
-    iam_user = user['UserName']
+# for user in iam_all_users['Users']:
+#     iam_user = user['UserName']
 
-    # List access keys for the current IAM user
-    response = client.list_access_keys(UserName=iam_user)
+#     # List access keys for the current IAM user
+#     response = client.list_access_keys(UserName=iam_user)
 
-    for access_key in response['AccessKeyMetadata']:
-        access_key_id = access_key['AccessKeyId']
-        access_key_creation_date = access_key['CreateDate']
+#     for access_key in response['AccessKeyMetadata']:
+#         access_key_id = access_key['AccessKeyId']
+#         access_key_creation_date = access_key['CreateDate']
 
-        print(f'IAM UserName: {iam_user}, AccessKeyId: {access_key_id}, CreationDate: {access_key_creation_date}')
+#         print(f'IAM UserName: {iam_user}, AccessKeyId: {access_key_id}, CreationDate: {access_key_creation_date}')
 
-        # Calculate key age
-        age = key_age(access_key_creation_date, user_creation_date=access_key_creation_date)
+#         # Calculate key age
+#         age = key_age(access_key_creation_date, user_creation_date=access_key_creation_date)
 
-        # Check key age and deactivate if it exceeds the maximum age
-        if age > KEY_MAXIMUM_AGE:
-            print(f'Deactivating the key for user {iam_user} as it exceeds the maximum key age')
-            client.update_access_key(UserName=iam_user, AccessKeyId=access_key_id, Status='Inactive')
+#         # Check key age and deactivate if it exceeds the maximum age
+#         if age > KEY_MAXIMUM_AGE:
+#             print(f'Deactivating the key for user {iam_user} as it exceeds the maximum key age')
+#             client.update_access_key(UserName=iam_user, AccessKeyId=access_key_id, Status='Inactive')
 
-def lambda_handler(event, context, user_creation_date=2023-10-14):
-    # Initialize the IAM client
-    client = boto3.client('iam', region_name='us-east-1')
-    key_age(access_key_creation_date, user_creation_date)
+# def lambda_handler(event, context, user_creation_date=2023-10-14):
+#     # Initialize the IAM client
+#     client = boto3.client('iam', region_name='us-east-1')
+#     key_age(access_key_creation_date, user_creation_date)
 
-    # Rest of the code here...
+#     # Rest of the code here...
 
-    return {
-        'statusCode': 200,
+#     return {
+#         'statusCode': 200,
         'body': 'Lambda function executed successfully!'
     }
 
