@@ -154,23 +154,10 @@ def lambda_handler(event, context):
 #         'body': 'Lambda function executed successfully!'
 #     }
 
+
 #
 #
-#
-# ############################## MY CODE #################################
-# # import boto3
-# # from datetime import datetime, timezone
-# #
-# # # Initialize the IAM client
-# # client = boto3.client('iam', region_name='us-east-1')
-# #
-# # # List current access keys for a specific user
-# # response = client.list_access_keys(UserName='python-user')
-# # print('Current access keys:', response)
-#
-#
-#
-# ############################## MY CODE #################################
+# ####################### MY CODE #########################
 #
 # import boto3
 # from datetime import datetime, timezone
